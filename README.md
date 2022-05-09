@@ -1,5 +1,7 @@
 # AsciiRect
 
+If you have Docker installed, run `docker-compose -p ascii-rect up -d` to start the services.
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`

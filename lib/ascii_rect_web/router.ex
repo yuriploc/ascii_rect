@@ -20,10 +20,11 @@ defmodule AsciiRectWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", AsciiRectWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", AsciiRectWeb do
+    pipe_through :api
+
+    get("/canvases/:canvas_uuid", CanvasesController, :get)
+  end
 
   # Enables LiveDashboard only for development
   #
