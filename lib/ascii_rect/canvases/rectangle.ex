@@ -25,9 +25,9 @@ defmodule AsciiRect.Canvases.Rectangle do
   def changeset(%__MODULE__{} = rectangle, attrs) do
     rectangle
     |> cast(attrs, @required ++ @optional)
-    |> validate_required(@required)
     |> validate_length(:fill, max: 1, message: "fill can't have more than one character.")
     |> validate_length(:outline, max: 1, message: "outline can't have more than one character.")
+    |> validate_at_least_one([:fill, :outline])
     |> validate_number(:width,
       less_than_or_equal_to: 200,
       message: "width can't be greater than 200."
@@ -45,8 +45,24 @@ defmodule AsciiRect.Canvases.Rectangle do
     |> validate_number(:x, greater_than_or_equal_to: 0, message: "x can't be less than 0.")
     |> validate_number(:y, less_than_or_equal_to: 99, message: "y can't be greater than 99.")
     |> validate_number(:y, greater_than_or_equal_to: 0, message: "y can't be less than 0.")
+    |> check_constraint(:fill,
+      name: :at_least_fill_or_outline,
+      message: "There should be at least one fill or outline."
+    )
+    |> validate_required(@required)
+  end
 
-    # TODO
-    # |> validate_unique_fill_or_outline()
+  defp validate_at_least_one(changeset, fields) do
+    field_values = Enum.map(fields, fn f -> get_field(changeset, f) end)
+
+    if Enum.any?(field_values) do
+      changeset
+    else
+      add_error(
+        changeset,
+        hd(fields),
+        "There should be at least one value in any #{inspect(fields)}."
+      )
+    end
   end
 end
