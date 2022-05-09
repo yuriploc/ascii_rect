@@ -75,4 +75,26 @@ defmodule AsciiRect.RectangleTest do
       assert %{y: ["y can't be less than 0."]} = errors_on(ch)
     end
   end
+
+  describe "insert/2" do
+    test "should exist at least one fill or outline when inserting a Rectangle.t()" do
+      ch = Rectangle.changeset(%Rectangle{}, %{x: 199, y: 99, width: 200, height: 100, fill: ""})
+
+      assert {:error, changeset} = Repo.insert(ch)
+
+      refute changeset.valid?
+
+      assert %{fill: ["There should be at least one value in any [:fill, :outline]."]} =
+               errors_on(changeset)
+    end
+
+    test "should error" do
+      query = """
+      INSERT INTO "rectangles" ("canvas_id","fill","height","outline","width","x","y","inserted_at","updated_at") VALUES (1,'',42,'',106, 100, 57, now(), now()) RETURNING "id"
+      """
+
+      assert {:error, %Postgrex.Error{postgres: %{constraint: "at_least_fill_or_outline"}}} =
+               Ecto.Adapters.SQL.query(AsciiRect.Repo, query)
+    end
+  end
 end
