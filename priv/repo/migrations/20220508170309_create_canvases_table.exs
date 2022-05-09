@@ -6,6 +6,8 @@ defmodule AsciiRect.Repo.Migrations.CreateCanvasesTable do
 
     create_if_not_exists table(:canvases) do
       add(:external_uuid, :binary_id, default: fragment("gen_random_uuid()"))
+
+      timestamps()
     end
 
     create(index(:canvases, [:external_uuid]))
