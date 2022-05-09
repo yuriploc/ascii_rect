@@ -17,4 +17,4 @@ canvas_ids = Enum.map(canvases, & &1.id)
 
 rectangles = length(canvases) + 2
 
-insert_list(rectangles, :rectangle, canvas_id: Enum.random(canvas_ids))
+Enum.each(0..rectangles, fn _ -> insert(:rectangle, canvas_id: Enum.random(canvas_ids)) end)

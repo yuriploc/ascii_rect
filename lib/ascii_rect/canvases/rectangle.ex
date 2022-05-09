@@ -9,6 +9,8 @@ defmodule AsciiRect.Canvases.Rectangle do
   @required [:height, :width, :x, :y]
   @optional [:canvas_id, :fill, :outline]
 
+  @derive {Jason.Encoder, except: [:__meta__, :canvas]}
+
   schema "rectangles" do
     field(:fill, :string)
     field(:height, :integer)
@@ -50,6 +52,8 @@ defmodule AsciiRect.Canvases.Rectangle do
       message: "There should be at least one fill or outline."
     )
     |> validate_required(@required)
+
+    # wishlist: could have constraints on both the db and the changeset
   end
 
   defp validate_at_least_one(changeset, fields) do

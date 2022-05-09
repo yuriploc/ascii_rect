@@ -1,36 +1,42 @@
 defmodule AsciiRect.Canvases.Canvas do
   @moduledoc """
-  A Canva record to draw rectangles.
+  A Canvas record to draw rectangles.
   """
   use Ecto.Schema
   import Ecto.Changeset
-  alias AsciiRect.Canvases.Rectangle
+  import Ecto.Query
+  alias AsciiRect.Canvases.{Canvas, Rectangle}
+
+  @type t :: %__MODULE__{}
 
   @optional [:external_uuid]
 
+  @derive {Jason.Encoder, except: [:__meta__]}
+
   schema "canvases" do
     field(:external_uuid, :binary_id)
-    has_many(:rectangles, Rectangle, foreign_key: :canvas_id)
+    has_many(:rectangles, Rectangle, foreign_key: :canvas_id, references: :id)
 
     timestamps()
   end
 
-  def changeset(%__MODULE__{} = canvas, attrs) do
+  @spec changeset(Canvas.t(), map()) :: Ecto.Changeset.t()
+  def changeset(%Canvas{} = canvas, attrs) do
     canvas
     |> cast(attrs, @optional)
     |> cast_assoc(:rectangles)
   end
 
-  def creation_changeset(%__MODULE__{} = canvas, attrs) do
-    changeset(canvas, attrs)
-    |> generate_uuid()
+  @spec by_uuid(Ecto.Queryable.t(), UUID.t()) :: Ecto.Query.t()
+  def by_uuid(query, uuid) do
+    query
+    |> where([canvas: c], c.external_uuid == ^uuid)
   end
 
-  defp generate_uuid(changeset) do
-    if changeset.valid? && is_nil(get_change(changeset, :external_uuid)) do
-      put_change(changeset, :external_uuid, UUID.uuid4())
-    else
-      changeset
-    end
+  @spec with_rectangles(Ecto.Queryable.t()) :: Ecto.Query.t()
+  def with_rectangles(query) do
+    query
+    |> join(:left, [canvas: c], r in assoc(c, :rectangles), as: :rectangle)
+    |> preload([rectangle: r], rectangles: r)
   end
 end
