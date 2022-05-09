@@ -5,9 +5,9 @@ defmodule AsciiRect.Factory do
 
   def rectangle_factory do
     %Rectangle{
-      fill: Faker.Lorem.characters(1),
+      fill: "",
       height: Enum.random(1..100),
-      outline: Faker.Lorem.characters(1),
+      outline: "",
       width: Enum.random(1..200),
       x: Enum.random(0..199),
       y: Enum.random(0..99)
