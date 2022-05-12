@@ -1,4 +1,4 @@
-defmodule AsciiRectWeb.CanvasesController do
+defmodule AsciiRectWeb.CanvasController do
   use AsciiRectWeb, :controller
 
   alias AsciiRect.Canvases

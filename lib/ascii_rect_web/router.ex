@@ -23,7 +23,8 @@ defmodule AsciiRectWeb.Router do
   scope "/api", AsciiRectWeb do
     pipe_through :api
 
-    get("/canvases/:canvas_uuid", CanvasesController, :get)
+    get("/canvases/:canvas_uuid", CanvasController, :get)
+    # post("/canvases", CanvasController, :create)
   end
 
   # Enables LiveDashboard only for development

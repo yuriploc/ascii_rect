@@ -4,7 +4,7 @@ defmodule AsciiRect.Canvases do
   """
 
   import Ecto.Query
-  alias AsciiRect.Canvases.{Canvas, Rectangle}
+  alias AsciiRect.Canvases.Canvas
   alias AsciiRect.Repo
 
   #####################
@@ -26,7 +26,10 @@ defmodule AsciiRect.Canvases do
     end
   end
 
-  def get_rectangle() do
-    :ok
+  @spec draw_canvas(Canvas.t()) :: String.t()
+  def draw_canvas(%Canvas{} = _canvas) do
+    # TODO: use changesets to get if the canvas is valid
+    # also do it for the POST req to save canvas/rectangles
+    "ok"
   end
 end

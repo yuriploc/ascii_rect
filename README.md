@@ -1,21 +1,25 @@
 # AsciiRect
 
+## Setting up the project
+
 If you have Docker installed, run `docker-compose -p ascii-rect up -d` to start the services.
 
-To start your Phoenix server:
+Then, to setup the Phoenix server: `mix deps.get && mix ecto.reset` should get your database seeded and ready to go.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+And to start the server: `iex -S mix phx.server`.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+## Experimenting with the API
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+With the database seeded, you can select a `canvas.external_uuid` and `CURL` it:
 
-## Learn more
+```sh
+curl http://localhost:4000/api/canvases/<external_uuid>
+```
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+// TODO
+
+// To create a canvas, you'll POST to
+
+```sh
+curl -X POST http://localhost:4000/api/canvases
+```
